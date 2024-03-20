@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Collectors Page";
+}
+@model List<RecycLab.Models.Collector>
+
+<style>
+    .text {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    form {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"], [type="datetime"], button {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+</style>
+<div>
+    <div class="one" style="margin-top:35px;">
+        <h1>Top Collectors</h1>
+    </div>
+    <div class="contt">
+        <div class="table-container">
+            <a href="#" id="addProductLink" style="background-color:green; display:inline-block; font-size:22px; font-weight:500; color:white; border-radius:8px; padding:5px 5px 5px 5px; text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                </svg>
+                Add Collector
+            </a>
+            <div class="text" id="textDiv">
+                <form id="" method="post" action="/Collector/addCollector">
+                    <div style="display: flex; justify-content: space-between;">
+                        <input type="text" name="firstName" placeholder="Fisrt Name" style="flex: 1; margin-right: 10px;" />
+                        <input type="text" name="lastName" placeholder="Last Name" style="flex: 1;" />
+                        <input type="text" name="address" placeholder="Address" style="flex: 1; margin-right: 10px;" />
+
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <input type="text" name="phone" placeholder="Phone Number" style="flex: 1; margin-right: 10px;" />
+                        <input type="text" name="email" placeholder="Email" style="flex: 1;" />
+                        <input type="datetime" name="birthdate" placeholder="BirthDate" style="flex: 1; margin-right: 10px;" />
+
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <input type="text" name="auto" placeholder="Car Brand" style="flex: 1; margin-right: 10px;" />
+                        <input type="text" name="autoType" placeholder="Type" style="flex: 1;" />
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <button id="submitBtn" class="btn btn-success" type="submit">Submit</button>
+                        <button class="btn btn-danger" type="reset">Reset</button>
+                    </div>
+                </form>
+            </div>
+            <table id="CollectorsTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Auto</th>
+                        <th>Confirmations</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var collector in Model)
+                    {
+                        <tr>
+
+                            <td>@collector.Person.FirstName @collector.Person.LastName</td>
+                            <td>@collector.Person.Email</td>
+                            <td>@collector.Person.PhoneNumber</td>
+                            <td>@collector.Auto : @collector.TypeAuto</td>
+                            <td>@collector.Confirmations.Count</td>
+                            <td>
+                                <a class="btn btn-danger" href="/Collector/Block/@collector.IdPerson">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                    Block
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script>$(document).ready(function () {
+        $('#CollectorsTable').DataTable();
+});
+    addProductLink.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default link behavior
+        textDiv.style.display = (textDiv.style.display === 'none') ? 'flex' : 'none';
+    });
+    </script>
