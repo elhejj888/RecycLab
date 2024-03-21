@@ -29,13 +29,13 @@ namespace RecycLab.Controllers
             return View(TransactionsDetails);
         }
 
-        public IActionResult addTransaction(string firstName, string lastName, string address, string phone, string ddate, string prods, string etat, string quantity, string totalPrice)
+        public IActionResult addTransaction(string firstName, string lastName, string address, string phone, string ddate, string prods, string etat, string quantity, string totalPrice , string ttype)
         {
-            Transaction transaction = new Transaction(22, Convert.ToInt32(prods), Convert.ToInt32(quantity), (float)Convert.ToDouble(totalPrice), etat, "achat");
+            Transaction transaction = new Transaction(30, Convert.ToInt32(prods), Convert.ToInt32(quantity), (float)Convert.ToDouble(totalPrice), etat, ttype);
             var test = _recycLabContext.Transactions.Add(transaction);
             _recycLabContext.SaveChanges();
 
-            return RedirectToAction("addTransac", "Product");
+            return RedirectToAction("PaymentWithPaypal", "Paypal");
         }
         public IActionResult DelTransaction(int id)
         {

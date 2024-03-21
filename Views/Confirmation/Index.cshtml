@@ -12,8 +12,8 @@
                     <th>Materiel</th>
                     <th>Collector</th>
                     <th>Full Price</th>
+                    <th>Transaction Type</th>
                     <th>IsConfirmed</th>
-                    <th>Collecting Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +24,7 @@
                         <td>@transac.Transaction.Dechet.TypeDechet</td>
                         <td>@transac.Collector.FirstName @transac.Collector.LastName</td>
                         <td>@transac.Transaction.TotalPrice</td>
+                        <td>@transac.Transaction.TransactionType</td>
                         @if (transac.ExecutionDate != null)
                         {
                             <td>@transac.ExecutionDate</td>
@@ -32,7 +33,6 @@
                         {
                             <td>Not Confirmed</td>
                         }
-                        <td>@transac.ConfirmationDate</td>
                     </tr>
                 }
             </tbody>

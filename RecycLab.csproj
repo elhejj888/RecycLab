@@ -18,6 +18,7 @@
     <None Remove="ViewModels\" />
     <None Remove="Views\Transaction\" />
     <None Remove="Views\Confirmation\" />
+    <None Remove="Views\Paypal\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Collector\" />
@@ -27,6 +28,7 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Views\Transaction\" />
     <Folder Include="Views\Confirmation\" />
+    <Folder Include="Views\Paypal\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.3.0" />
@@ -40,5 +42,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="PayPal" Version="1.9.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
   </ItemGroup>
 </Project>

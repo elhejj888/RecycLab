@@ -39,6 +39,7 @@
                     <th>Quantity</th>
                     <th>Full Price</th>
                     <th>Transaction Date</th>
+                    <th>Transaction Type</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -51,6 +52,7 @@
                             <td>@transac.Quantity</td>
                             <td>@transac.TotalPrice</td>
                             <td>@transac.TransactionDate</td>
+                            <td>@transac.TransactionType</td>
                             <td>
                                 @if (transac.isConfirmed == false)
                                     {

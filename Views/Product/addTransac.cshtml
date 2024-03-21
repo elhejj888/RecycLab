@@ -50,6 +50,12 @@
                 <input type="datetime" name="ddate" placeholder="delivery Date" style="flex: 1; margin-right: 10px;" />
             </div>
             <div style="display: flex; justify-content: space-between;">
+                <select name="ttype" style="flex: 1;">
+                    <option value="Achat">Achat</option>
+                    <option value="Vente">Vente</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
                 <select id="dechets" name="prods" style="flex: 1; margin-right: 10px;">
                     @if (Model != null)
                     {
@@ -64,7 +70,7 @@
                     <option value="Endommagé">Endommagé</option>
                     <option value="contaminé">contaminé</option>
                 </select>
-                
+
             </div>
             <div style="display: flex; justify-content: space-between;">
                 <input id="quantity" type="number" name="quantity" placeholder="Quantity" style="flex: 1; margin-right: 10px;" />
@@ -76,6 +82,7 @@
             <div style="display: flex; justify-content: center;">
                 <button id="submitBtn" class="btn btn-success" type="submit">Submit</button>
                 <button class="btn btn-danger" type="reset">Reset</button>
+                <button onclick="redirectToPayment()">pay</button>
             </div>
         </form>
     </div>
@@ -100,5 +107,22 @@
         function updateTotal() {
             total.value = (parseFloat(unitprice.value) * parseFloat(quantity.value)) || 0;
             total2.value = total.value;
+        }
+
+        function redirectToPayment() {
+            var selectElement = document.getElementById('dechets');
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var dechet = selectedOption.text;
+            var price = selectedOption.getAttribute('data-price');
+            var quantity = document.getElementById('quantity').value;
+            console.log(dechet + " " + price + " " + quantity);
+
+            // Construct the URL with query parameters
+            var url = '/Home/PaymentWithPaypal?dechet=' + encodeURIComponent(dechet) + '&price=' + encodeURIComponent(price) + '&quantity=' + encodeURIComponent(quantity);
+
+            // Redirect to the URL
+            window.location.href = url;
+
+            //
         }
     </script>
