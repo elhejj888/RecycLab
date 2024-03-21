@@ -1,0 +1,46 @@
+﻿@model List<RecycLab.Models.Confirmation>
+
+<div class="one" style="margin-top:35px;">
+    <h1>Confirmations Manager</h1>
+</div>
+<div class="contt">
+    <div class="table-container">
+        <table id="TransactionsTable" class="display">
+            <thead>
+                <tr>
+                    <th>Transaction Id</th>
+                    <th>Materiel</th>
+                    <th>Collector</th>
+                    <th>Full Price</th>
+                    <th>Transaction Type</th>
+                    <th>IsConfirmed</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transac in Model)
+                {
+                    <tr>
+                        <td>@transac.Transaction.IdTransaction</td>
+                        <td>@transac.Transaction.Dechet.TypeDechet</td>
+                        <td>@transac.Collector.FirstName @transac.Collector.LastName</td>
+                        <td>@transac.Transaction.TotalPrice</td>
+                        <td>@transac.Transaction.TransactionType</td>
+                        @if (transac.ExecutionDate != null)
+                        {
+                            <td>@transac.ExecutionDate</td>
+                        }
+                        else
+                        {
+                            <td>Not Confirmed</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>$(document).ready(function () {
+    $('#TransactionsTable').DataTable();
+    });</script>

@@ -1,0 +1,128 @@
+﻿@model List<RecycLab.Models.Dechet>
+
+
+<style>
+    .text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    form {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"], [type="datetime"], [type="number"], button , select , select option {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+   
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+</style>
+<div class="table-container">
+
+    <div class="text" id="textDiv">
+        <form id="" method="post" action="/Transaction/addTransaction">
+            <div style="display: flex; justify-content: space-between;">
+                <input type="text" name="firstName" placeholder="Fisrt Name" style="flex: 1; margin-right: 10px;" />
+                <input type="text" name="lastName" placeholder="Last Name" style="flex: 1;" />
+
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <input type="text" name="address" placeholder="Delivery Address" style="flex: 1; margin-right: 10px;" />
+                <input type="text" name="phone" placeholder="Contact Number" style="flex: 1; margin-right: 10px;" />
+                <input type="datetime" name="ddate" placeholder="delivery Date" style="flex: 1; margin-right: 10px;" />
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <select name="ttype" style="flex: 1;">
+                    <option value="Achat">Achat</option>
+                    <option value="Vente">Vente</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <select id="dechets" name="prods" style="flex: 1; margin-right: 10px;">
+                    @if (Model != null)
+                    {
+                        @foreach (var prod in Model)
+                        {
+                            <option value="@prod.IdDechet" data-price="@prod.PrixUnitaire">@prod.TypeDechet</option>
+                        }
+                    }
+                </select>
+                <select name="etat" style="flex: 1;">
+                    <option value="propre">propre</option>
+                    <option value="Endommagé">Endommagé</option>
+                    <option value="contaminé">contaminé</option>
+                </select>
+
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <input id="quantity" type="number" name="quantity" placeholder="Quantity" style="flex: 1; margin-right: 10px;" />
+                <input id="unitprice" type="text" name="unitPrice" placeholder="Unit Price" style="flex: 1;" disabled />
+                <input id="total" type="text" placeholder="Total Price" style="flex: 1; margin-right: 10px;" disabled />
+                <input id="total2" type="text" name="totalPrice" placeholder="Total Price" style="flex: 1; margin-right: 10px; display:none" />
+
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <button id="submitBtn" class="btn btn-success" type="submit">Submit</button>
+                <button class="btn btn-danger" type="reset">Reset</button>
+                <button onclick="redirectToPayment()">pay</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const drops = document.getElementById("dechets");
+        const unitprice = document.getElementById("unitprice");
+        const quantity = document.getElementById("quantity");
+        const total = document.getElementById("total");
+        const total2 = document.getElementById("total2");
+
+
+        drops.addEventListener('change', function () {
+            unitprice.value = parseFloat(drops.options[drops.selectedIndex].getAttribute('data-price'));
+            updateTotal();
+        });
+
+        quantity.addEventListener('input', function () {
+            updateTotal();
+        });
+
+        function updateTotal() {
+            total.value = (parseFloat(unitprice.value) * parseFloat(quantity.value)) || 0;
+            total2.value = total.value;
+        }
+
+        function redirectToPayment() {
+            var selectElement = document.getElementById('dechets');
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var dechet = selectedOption.text;
+            var price = selectedOption.getAttribute('data-price');
+            var quantity = document.getElementById('quantity').value;
+            console.log(dechet + " " + price + " " + quantity);
+
+            // Construct the URL with query parameters
+            var url = '/Home/PaymentWithPaypal?dechet=' + encodeURIComponent(dechet) + '&price=' + encodeURIComponent(price) + '&quantity=' + encodeURIComponent(quantity);
+
+            // Redirect to the URL
+            window.location.href = url;
+
+            //
+        }
+    </script>

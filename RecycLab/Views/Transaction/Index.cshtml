@@ -1,0 +1,124 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<RecycLab.Models.Transaction>
+
+<style>
+    input[type="text"], [type="datetime"], button {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    dialog {
+        border: 3px green double;
+        border-radius: 10px;
+        height: 20%;
+        width:350px;
+        align-content:center;
+        align-items:center;
+    }
+
+    dialog .dcontainer {
+        margin: auto;
+        padding:20px;
+    }
+</style>
+<div class="one" style="margin-top:35px;">
+    <h1>Transactions Manager</h1>
+</div>
+<div class="contt">
+    <div class="table-container">
+        <table id="TransactionsTable" class="display">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Full Price</th>
+                    <th>Transaction Date</th>
+                    <th>Transaction Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var transac in Model)
+{
+                        <tr>
+                            <td>@transac.User.FirstName @transac.User.LastName</td>
+                            <td>@transac.Dechet.TypeDechet</td>
+                            <td>@transac.Quantity</td>
+                            <td>@transac.TotalPrice</td>
+                            <td>@transac.TransactionDate</td>
+                            <td>@transac.TransactionType</td>
+                            <td>
+                                @if (transac.isConfirmed == false)
+                                    {
+                                <button id="confirmButton" data-dialog-id="@($"dd-{transac.IdTransaction}")" class="btn btn-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                    Confirm
+                                </button>
+                                    
+                                <dialog id="dd-@transac.IdTransaction" style="margin:auto;">
+                                    <div class="dcontainer">
+                                        <p>You're about to Confirm the Transaction with the Id : <span style="color:green; font-weight:bold;">@transac.IdTransaction</span></p>
+                                        <form method="post" action="/Confirmation/confirm" style="display:flex;flex-direction:column;">
+                                            <input type="number" name="transacId" value="@transac.IdTransaction" style="display:none" />
+                                            <input type="datetime-local" name="dateExec" placeholder="Delivery Date" style="flex: 1; margin-right: 10px;" />
+                                            <button type="submit" class="btn btn-success">Submit</button>
+                                        </form>
+                                    </div>
+                                </dialog>
+                                    }
+                                <a class="btn btn-danger" href="/Transaction/DelTransaction/@transac.IdTransaction">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+}
+            </tbody>
+        </table>
+    </div>
+
+    </div>
+
+<script>$(document).ready(function () {
+    $('#TransactionsTable').DataTable();
+});
+
+
+    const buttons = document.querySelectorAll('#confirmButton');
+
+    // Add event listener to each button
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            // Get the corresponding dialog id from data attribute
+            const dialogId = button.dataset.dialogId;
+
+            // Find the dialog element
+            const dialog = document.getElementById(dialogId);
+
+            // Show the dialog
+            dialog.showModal();
+        });
+    });
+    function submitDateTime(transactionId) {
+        // Get the value of the datetime input
+        var dateTimeInput = document.getElementById("dateTimeInput" + transactionId).value;
+
+        // Show an alert with the datetime input value
+        alert("Selected delivery date: " + dateTimeInput);
+
+        // Optionally, you can also submit the form data to a server here if needed
+    }
+
+    </script>
