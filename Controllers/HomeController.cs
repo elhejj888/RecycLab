@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Mysqlx.Crud;
 using PayPal.Api;
 using RecycLab.Models;
+using System.Linq;
+
 
 namespace RecycLab.Controllers;
 
@@ -46,9 +48,37 @@ public class HomeController : Controller
             .Take(5)
             .ToList();
         var sum = _recyclabContext.Transactions.Sum(e => e.TotalPrice);
+        var dailyTransactionCounts = _recyclabContext.Transactions
+            .GroupBy(t => t.TransactionDate.Value.Date) // Group by the date part of TransactionDate
+            .Select(g => new
+            {
+                TransactionDay = g.Key,
+                TransactionCount = g.Count()
+            })
+            .ToList();
+        var dailyConfirmationCounts = _recyclabContext.Confirmations
+            .GroupBy(c => c.ConfirmationDate.Value.Date) // Group by the date part of ConfirmationDate
+            .Select(g => new
+            {
+                ConfirmationDay = g.Key,
+                ConfirmationCount = g.Count()
+            })
+            .ToList();
+
+        var dechetTransactionCounts = _recyclabContext.Transactions
+        .GroupBy(t => t.Dechet)
+        .Select(g => new
+        {
+            Dechet = g.Key,
+            TransactionCount = g.Count()
+        })
+        .ToList();
 
         var Counts = new
         {
+            dailyConfirmationCounts = dailyConfirmationCounts,
+            dailyTransactionCounts = dailyTransactionCounts,
+            dechetTransactionCounts = dechetTransactionCounts,
             TopProducts = TopProducts,
             TopCollectors = TopCollectors,
             TopSellers = TopSellers,
